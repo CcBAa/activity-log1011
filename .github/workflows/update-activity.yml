@@ -2,14 +2,24 @@ name: Update GitHub Activity
 
 on:
   schedule:
-    - cron: "*/30 * * * *" # Runs every 30 minutes
-  workflow_dispatch: # Allows manual triggering
+    - cron: "*/30 * * * *"  # 每 30 分鐘運行一次
+  workflow_dispatch:  # 手動觸發
 
 jobs:
   update-activity:
     runs-on: ubuntu-latest
     steps:
-      - uses: CcBAa/activity-log1011@master
+      - name: Use activity-log Action
+        uses: CcBAa/activity-log1011@master  # 使用該 Action
+        with:
+          GITHUB_USERNAME: "CcBAa"  # 你的 GitHub 使用者名稱
+          GITHUB_TOKEN: ${{ secrets.MYGITHUB_TOKEN }}  # 使用 GitHub Token，來自於 GitHub Secrets
+          EVENT_LIMIT: 10  # 設置事件數量
+          OUTPUT_STYLE: MARKDOWN  # 設置輸出樣式
+          IGNORE_EVENTS: "[]"  # 忽略的事件（如果有）
+          README_PATH: README.md  # 設置更新的 README 文件路徑
+          COMMIT_MESSAGE: "⚡ Update README.md with latest activity"  # 提交時的訊息
+
       - name: Run Update GitHub Activity
         uses: ./
         with:
